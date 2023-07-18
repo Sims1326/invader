@@ -19,6 +19,10 @@ class Player:
     def draw_player(self):
         self.screen.blit(self.image, self.rect)
 
+    def reset_player(self):
+        self.rect.midbottom = self.screen_rect.midbottom
+        self.x = float(self.rect.x)
+
     def update_player(self):
         if self.player_left and self.rect.left > 0:
             self.x -= self.settings.player_speed
