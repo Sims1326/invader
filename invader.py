@@ -57,6 +57,7 @@ class Invaders:
     def check_start(self, mouse_position):
         if self.start_button.rect.collidepoint(mouse_position):
             self.settings.game_active = True
+            self.stats.reset()
 
     def fire_bullet(self):
         new_bullet = Bullet(self)
@@ -86,6 +87,7 @@ class Invaders:
             for ennemy in self.enemies.sprites():
                 self.stats.points += self.settings.enemy_point_value
                 self.score.prep_score()
+                self.score.check_hs()
         if not self.enemies:
             self.bullets.empty()
             self.make_enemy()
@@ -129,11 +131,12 @@ class Invaders:
 
         if pygame.sprite.spritecollideany(self.player, self.enemies):
             self.ship_hit()
+        self.check_ship_location()
 
     def check_ship_location(self):
         screen_rect = self.screen.get_rect()
         for enemy in self.enemies.sprites():
-            if enemy.rect.bottom <= screen_rect.bottom:
+            if enemy.rect.bottom >= screen_rect.bottom:
                 self.ship_hit()
                 break
 
@@ -146,9 +149,11 @@ class Invaders:
             self.make_enemy()
 
         else:
+            self.bullets.empty()
+            self.enemies.empty()
             self.settings.game_active = False
 
-        sleep(0.5)
+        sleep(1)
 
     def run_game(self):
         while True:
