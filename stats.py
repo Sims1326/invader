@@ -6,3 +6,4 @@ class Stats:
 
     def reset(self):
         self.lives_left = self.settings.lives
+        self.points = 0

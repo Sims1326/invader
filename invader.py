@@ -3,6 +3,8 @@ from time import sleep
 import pygame
 import math
 from bullet import Bullet
+from start_button import Button
+from scoreboard import Scoreboard
 from settings import Settings
 from stats import Stats
 from player_character import Player
@@ -22,7 +24,8 @@ class Invaders:
         self.player = Player(self)
         self.bullets = pygame.sprite.Group()
         self.stats = Stats(self)
-
+        self.score = Scoreboard(self)
+        self.start_button = Button(self, "Play")
         self.make_enemy()
 
     def check_events(self):
@@ -48,6 +51,12 @@ class Invaders:
                     self.player.player_right = False
                 elif event.key == pygame.K_LEFT:
                     self.player.player_left = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.check_start(pygame.mouse.get_pos())
+
+    def check_start(self, mouse_position):
+        if self.start_button.rect.collidepoint(mouse_position):
+            self.settings.game_active = True
 
     def fire_bullet(self):
         new_bullet = Bullet(self)
@@ -57,8 +66,12 @@ class Invaders:
         self.screen.fill(self.settings.bg_color)
         self.player.draw_player()
         self.enemies.draw(self.screen)
+        self.score.show_score()
+        if not self.settings.game_active:
+            self.start_button.draw_button()
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
+
         pygame.display.flip()
 
     def update_bullets(self):
@@ -69,9 +82,14 @@ class Invaders:
 
         collisions = pygame.sprite.groupcollide(
             self.bullets, self.enemies, True, True)
+        if collisions:
+            for ennemy in self.enemies.sprites():
+                self.stats.points += self.settings.enemy_point_value
+                self.score.prep_score()
         if not self.enemies:
             self.bullets.empty()
             self.make_enemy()
+            self.settings.level_up()
 
     def make_enemy(self):
         enemy = Enemy(self)
