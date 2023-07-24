@@ -58,6 +58,8 @@ class Invaders:
         if self.start_button.rect.collidepoint(mouse_position):
             self.settings.game_active = True
             self.stats.reset()
+            self.score.prep_level()
+            self.score.prep_lives()
 
     def fire_bullet(self):
         new_bullet = Bullet(self)
@@ -92,6 +94,7 @@ class Invaders:
             self.bullets.empty()
             self.make_enemy()
             self.settings.level_up()
+            self.score.prep_level()
 
     def make_enemy(self):
         enemy = Enemy(self)
@@ -99,7 +102,7 @@ class Invaders:
         available_space = self.settings.screen_width - (2 * enemy_width)
         enemies_on_screen = math.floor(available_space / (enemy_width * 2))
         space_y = (self.settings.screen_height -
-                   (5 * enemy_height) - self.player.rect.height)
+                   (6 * enemy_height) - self.player.rect.height)
         rows = math.floor(space_y / (enemy_height * 2))
         for row in range(rows):
             for enemy_load in range(enemies_on_screen):
@@ -143,6 +146,7 @@ class Invaders:
     def ship_hit(self):
         if self.settings.lives > 0:
             self.settings.lives -= 1
+            self.score.prep_lives()
             self.enemies.empty()
             self.bullets.empty()
 

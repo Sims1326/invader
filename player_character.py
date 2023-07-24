@@ -1,8 +1,10 @@
 import pygame
+from pygame.sprite import Sprite
 
 
-class Player:
+class Player(Sprite):
     def __init__(self, game):
+        super().__init__()
         self.screen = game.screen
         self.screen_rect = game.screen.get_rect()
         self.settings = game.settings
@@ -10,7 +12,7 @@ class Player:
         self.player_left = False
 
         image = pygame.image.load('Assets/player.bmp')
-        image_size = (100, 100)
+        image_size = (50, 50)
         self.image = pygame.transform.scale(image, image_size)
         self.rect = self.image.get_rect()
         self.rect.midbottom = self.screen_rect.midbottom

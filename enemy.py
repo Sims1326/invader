@@ -16,7 +16,7 @@ class Enemy(Sprite):
         if image.get_alpha() is None:
             image = image.convert_alpha()
 
-        image_size = (50, 50)
+        image_size = (45, 45)
         image = pygame.transform.scale(image, image_size)
 
         self.image = image

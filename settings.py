@@ -30,7 +30,7 @@ class Settings:
 
     def default_settings(self):
         self.lives = 3
-        self.enemy_latteral_speed = .5
+        self.enemy_latteral_speed = .3
         self.player_speed = 0.75
         self.level = 1
 
